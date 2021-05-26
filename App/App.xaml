@@ -1,9 +1,9 @@
-﻿<Application x:Class="KTiPO.App"
+﻿<Application x:Class="KiTPO.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:KTiPO"
+             xmlns:local="clr-namespace:KiTPO"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+         <BitmapImage x:Key="AreaImage" UriSource="Resources/area.png"></BitmapImage>
     </Application.Resources>
 </Application>
