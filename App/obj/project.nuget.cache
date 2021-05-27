@@ -1,8 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "pCi+StM+cZe8egvxc0PSyNOgH/MqlovgpOiL3M7UlsBi+8yFgZYZ4+sXD1NThlZT354obuYO57k4voiFyEnDWA==",
+  "dgSpecHash": "bEJB+46lj37svxm3T9g6m0DGvEiSLWb6WVCc1Qar6cWuQ8d8P8lbyxG9pskSbWxh4pv72brTYJgKoYu5V3QL2g==",
   "success": true,
   "projectFilePath": "C:\\dotnet\\KiTPO\\App\\App.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "expectedPackageFiles": [
+    "C:\\Users\\artgl\\.nuget\\packages\\extended.wpf.toolkit\\4.1.0\\extended.wpf.toolkit.4.1.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Extended.Wpf.Toolkit 4.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Extended.Wpf.Toolkit",
+      "targetGraphs": [
+        "net5.0-windows7.0"
+      ]
+    }
+  ]
 }
