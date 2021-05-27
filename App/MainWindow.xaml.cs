@@ -28,6 +28,7 @@ namespace KiTPO
     {
         public double CenterCoordinate { get; set; }
         public double ScaleValue = 114; // 1 on coord. is 114px
+        public string FilePath = "out" + DateTime.UtcNow.Millisecond + ".txt";
 
         public ObservableCollection<string> OutputList { get; set; } = new();
 
@@ -40,11 +41,14 @@ namespace KiTPO
         }
 
 
-        private void PushToOutput(string v)
+        private async void WriteToOutput(string v)
         {
             OutputList.Add(v);
             OutputListView.SelectedIndex = OutputList.Count - 1;
             OutputListView.ScrollIntoView(OutputListView.SelectedItem);
+
+            await using StreamWriter file = new(FilePath, append: true);
+            await file.WriteLineAsync(v);
         }
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -78,7 +82,7 @@ namespace KiTPO
             Canvas.SetTop(newEllipse, y);
             var (position, xFlatten, yFlatten) =
                 CoordinatesProcessing.GetPointPosition(x, y, CenterCoordinate, ScaleValue);
-            PushToOutput(CoordinatesProcessing.GenerateMessage(position, xFlatten, yFlatten));
+            WriteToOutput(CoordinatesProcessing.GenerateMessage(position, xFlatten, yFlatten));
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -92,7 +96,7 @@ namespace KiTPO
                 XInput.Value = null;
                 YInput.Value = null;
             }
-            else PushToOutput("Ошибка ввода данных");
+            else WriteToOutput("Ошибка ввода данных");
         }
 
         private async void MenuItem_OnClick(object sender, RoutedEventArgs e)
@@ -108,7 +112,7 @@ namespace KiTPO
                 ResetCanvas();
                 var filename = dlg.FileName;
                 var (err, list) = await FileProcessing.GetPointsFromFile(filename);
-                PushToOutput(FileProcessing.GenerateMessage((err, list)));
+                WriteToOutput(FileProcessing.GenerateMessage((err, list)));
                 if (list != null)
                 {
                     foreach (var point in list)
