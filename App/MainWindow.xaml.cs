@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -32,6 +33,7 @@ namespace KiTPO
 
         public MainWindow()
         {
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             InitializeComponent();
             CenterCoordinate = MainImage.Width / 2;
             OutputListView.ItemsSource = OutputList;
@@ -45,23 +47,26 @@ namespace KiTPO
             OutputListView.ScrollIntoView(OutputListView.SelectedItem);
         }
 
-        private void MainImage_OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var pos = e.GetPosition(MainImage);
             ProcessPoint(pos.X, pos.Y);
         }
 
+        private void ResetCanvas()
+        {
+            var toRemove = new List<UIElement>();
+            foreach (UIElement el in Canvas.Children)
+                if (el is Ellipse)
+                    toRemove.Add(el);
+            foreach (var el in toRemove)
+                Canvas.Children.Remove(el);
+        }
+
         private void ProcessPoint(double x, double y, bool append = false)
         {
-            if (!append)
-            {
-                var toRemove = new List<UIElement>();
-                foreach (UIElement el in Canvas.Children)
-                    if(el is Ellipse) toRemove.Add(el);
-                foreach (var el in toRemove)
-                    Canvas.Children.Remove(el);
-            }
-            
+            if (!append) ResetCanvas();
+
             var newEllipse = new Ellipse
             {
                 Fill = new SolidColorBrush(Colors.Red),
@@ -71,7 +76,8 @@ namespace KiTPO
             Canvas.Children.Add(newEllipse);
             Canvas.SetLeft(newEllipse, x);
             Canvas.SetTop(newEllipse, y);
-            var (position, xFlatten, yFlatten) = CoordinatesProcessing.GetPointPosition(x, y, CenterCoordinate, ScaleValue);
+            var (position, xFlatten, yFlatten) =
+                CoordinatesProcessing.GetPointPosition(x, y, CenterCoordinate, ScaleValue);
             PushToOutput(CoordinatesProcessing.GenerateMessage(position, xFlatten, yFlatten));
         }
 
@@ -95,12 +101,24 @@ namespace KiTPO
 
             // Display OpenFileDialog by calling ShowDialog method 
             var result = dlg.ShowDialog();
-            
+
             // Get the selected file name and display in a TextBox 
             if (result == true)
             {
+                ResetCanvas();
                 var filename = dlg.FileName;
-                await FileProcessing.GetPointsFromFile(filename);
+                var (err, list) = await FileProcessing.GetPointsFromFile(filename);
+                PushToOutput(FileProcessing.GenerateMessage((err, list)));
+                if (list != null)
+                {
+                    foreach (var point in list)
+                    {
+                        var (x, y) =
+                            CoordinatesProcessing.UnFlattenCoordinates(point.Item1, point.Item2, CenterCoordinate,
+                                ScaleValue);
+                        ProcessPoint(x, y, true);
+                    }
+                }
             }
         }
     }
