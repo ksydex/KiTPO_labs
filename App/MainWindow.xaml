@@ -42,9 +42,10 @@
                 <xctk:DoubleUpDown AllowTextInput="False" x:Name="XInput" Width="100" FormatString="F3" Increment=".1" />
                 <TextBlock Text="Y: " />
                 <xctk:DoubleUpDown AllowTextInput="False" x:Name="YInput" Width="100" FormatString="F3" Increment=".1" />
-                <Button Content="Добавить точку" Margin="10, 0, 0, 0" Click="ButtonBase_OnClick"/>
+                <Button x:Name="ButtonAddPoint" Content="Добавить точку" Margin="10, 0, 0, 0" Click="ButtonBase_OnClick"/>
+                <Button Content="Заполнить случайными числами" Margin="10, 0, 0, 0" Click="ButtonBase_OnClick2"/>
             </StackPanel>
-
+            
         </StackPanel>
 
     </DockPanel>

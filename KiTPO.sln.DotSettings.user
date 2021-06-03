@@ -1,0 +1,7 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cc674082_002D92a9_002D4b21_002D9759_002De5661e611ddc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetPointsFromFile" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::0A9D33BF-3B13-43E0-8B60-6019ABBD8B5F::net5.0-windows7.0::App.UnitTest.FileProcessingTests.GetPointsFromFile&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::0A9D33BF-3B13-43E0-8B60-6019ABBD8B5F::net5.0-windows7.0::App.UnitTest.CoordinatesProcessingTests.GetPointPosition.ReturnsAwaitedResult&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

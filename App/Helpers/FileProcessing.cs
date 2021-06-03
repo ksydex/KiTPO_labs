@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using KiTPO.Enums;
+using KiTPO.Extensions;
 
 namespace KiTPO.Helpers
 {
@@ -24,8 +26,9 @@ namespace KiTPO.Helpers
                 if (values.Length != 2) return (FileReadError.WrongFormat, null);
                 double? v1 = double.TryParse(values[0], out var x) ? x : null;
                 double? v2 = double.TryParse(values[1], out var y) ? y : null;
-                
+
                 if (v1 == null || v2 == null) return (FileReadError.WrongFormat, null);
+                if (!v1.Value.IsInRange() || !v2.Value.IsInRange()) return (FileReadError.OutOfRange, null);
                 points.Add((v1.Value, v2.Value));
             }
 
@@ -35,10 +38,10 @@ namespace KiTPO.Helpers
         public static string GenerateMessage((FileReadError?, List<(double, double)>) x)
         => x.Item1 switch
         {
-            null => "Файл открыт, считано " + x.Item2.Count + " точек",
+            null => "Точки вводятся через файл, считано " + x.Item2.Count + " точек",
             FileReadError.WrongFormat => "Файл открыт, неправильный формат",
             FileReadError.FileIsEmpty => "Файл был открыт, но он пуст",
-            FileReadError.OutOfRange => "Файл открыт, но некоторые значения оказались за пределами числового диапазона"
+            FileReadError.OutOfRange => "Файл был открыт, но обнаружен выход за пределы допустимого числового диапазона"
         };
     }
 }

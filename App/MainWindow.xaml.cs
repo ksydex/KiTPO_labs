@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KiTPO.Extensions;
 using KiTPO.Helpers;
 using Microsoft.Win32;
 
@@ -27,7 +28,7 @@ namespace KiTPO
     public partial class MainWindow : Window
     {
         public double CenterCoordinate { get; set; }
-        public double ScaleValue = 114; // 1 on coord. is 114px
+        public static double ScaleValue = 114; // 1 on coord. is 114px
         public string FilePath = "out" + DateTime.UtcNow.Millisecond + ".txt";
 
         public ObservableCollection<string> OutputList { get; set; } = new();
@@ -38,6 +39,11 @@ namespace KiTPO
             InitializeComponent();
             CenterCoordinate = MainImage.Width / 2;
             OutputListView.ItemsSource = OutputList;
+            SetInputValues(0, 0);
+            // TODO
+            // 1. Обработать длинные числа +
+            // 2. Ввод с помощью случайных чисел +
+            // 3. Указать в логе откуда получены данные +
         }
 
 
@@ -54,6 +60,7 @@ namespace KiTPO
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var pos = e.GetPosition(MainImage);
+            WriteToOutput("Точка вводится вручную нажатием по графику");
             ProcessPoint(pos.X, pos.Y);
         }
 
@@ -82,21 +89,24 @@ namespace KiTPO
             Canvas.SetTop(newEllipse, y);
             var (position, xFlatten, yFlatten) =
                 CoordinatesProcessing.GetPointPosition(x, y, CenterCoordinate, ScaleValue);
-            WriteToOutput(CoordinatesProcessing.GenerateMessage(position, xFlatten, yFlatten));
+
+            if (!xFlatten.IsInRange() || !yFlatten.IsInRange()) WriteToOutput("Обнаружен выход за пределы допустимого числового диапазона");
+            else WriteToOutput(CoordinatesProcessing.GenerateMessage(position, xFlatten, yFlatten));
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var x = XInput.Value;
             var y = YInput.Value;
+
             if (x != null && y != null)
             {
                 (x, y) = CoordinatesProcessing.UnFlattenCoordinates(x.Value, y.Value, CenterCoordinate, ScaleValue);
+                WriteToOutput("Точка вводится вручную через поля ввода");
                 ProcessPoint(x.Value, y.Value);
-                XInput.Value = null;
-                YInput.Value = null;
             }
-            else WriteToOutput("Ошибка ввода данных");
+            else WriteToOutput("Данные не были введены");
+            SetInputValues(0, 0);
         }
 
         private async void MenuItem_OnClick(object sender, RoutedEventArgs e)
@@ -125,5 +135,15 @@ namespace KiTPO
                 }
             }
         }
+
+        private void SetInputValues(double x, double y)
+        {
+            XInput.Text = x.ToString(CultureInfo.InvariantCulture);
+            YInput.Text = y.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void ButtonBase_OnClick2(object sender, RoutedEventArgs e)
+            => SetInputValues(NumberExtensions.RandomInRange(NumberExtensions.Min, NumberExtensions.Max),
+                NumberExtensions.RandomInRange(NumberExtensions.Min, NumberExtensions.Max));
     }
 }

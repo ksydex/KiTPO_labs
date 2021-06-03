@@ -12,8 +12,7 @@ namespace KiTPO.Helpers
 
         public static (double, double) UnFlattenCoordinates(double x, double y, double offset, double scale) => (
             (x * scale) + offset, ((-y * scale) + offset));
-
-
+        
         public static (PointPosition, double, double) GetPointPosition(double x, double y, double offset, double scale)
         {
             (x, y) = FlattenCoordinates(x, y, offset, scale);
@@ -29,7 +28,7 @@ namespace KiTPO.Helpers
         }
 
         public static string GenerateMessage(PointPosition p, double x, double y)
-            => "Точка с координатами x: " + x.ToString("0.##") + ", y: " + y.ToString("0.##") + " находится " + p switch
+            => "|  Точка с координатами x: " + x.ToString("0.##") + ", y: " + y.ToString("0.##") + " находится " + p switch
             {
                 PointPosition.Inside => "внутри зоны",
                 PointPosition.OnTheBorder => " на границе зоны",
